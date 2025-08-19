@@ -7,13 +7,13 @@ import {
   Typography, 
   IconButton,
   Paper,
-  Grid,
   TextField,
   Button
 } from '@mui/material';
 import { supabase } from '../lib/supabase';
 import type { MeterReading } from '../types/meterReading';
 import { useState, useEffect } from 'react';
+import Grid from '@mui/material/Grid';
 import { MenuItem, Select, FormControl, InputLabel } from '@mui/material';
 import type { SelectChangeEvent } from '@mui/material';
 import LogoutIcon from '@mui/icons-material/Logout';
