@@ -17,7 +17,6 @@ import {
 import { supabase } from '../lib/supabase';
 import type { MeterReading } from '../types/meterReading';
 import { useState, useEffect } from 'react';
-import Grid from '@mui/material/Grid';
 import type { SelectChangeEvent } from '@mui/material';
 import LogoutIcon from '@mui/icons-material/Logout';
 
@@ -282,61 +281,55 @@ export const MainPage = () => {
         >
           {/* Month/Year Selectors */}
           <Paper elevation={2} sx={{ p: { xs: 1, sm: 2 }, mb: 3 }}>
-            <Grid container spacing={2}>
-              <Grid item xs={6}>
-                <FormControl fullWidth>
-                  <InputLabel id="year-select-label">Năm</InputLabel>
-                  <Select
-                    labelId="year-select-label"
-                    value={selectedYear}
-                    label="Năm"
-                    onChange={handleYearChange}
-                  >
-                    {Array.from({ length: 26 }, (_, i) => 2025 + i).map((year) => (
-                      <MenuItem key={year} value={year}>
-                        {year}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
-              </Grid>
-              <Grid item xs={6}>
-                <FormControl fullWidth>
-                  <InputLabel id="month-select-label">Tháng</InputLabel>
-                  <Select
-                    labelId="month-select-label"
-                    value={selectedMonth}
-                    label="Tháng"
-                    onChange={handleMonthChange}
-                  >
-                    {Array.from({ length: 12 }, (_, i) => i + 1).map((month) => (
-                      <MenuItem key={month} value={month}>
-                        Tháng {month}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
-              </Grid>
-            </Grid>
+            <Box display="flex" flexDirection={{ xs: 'column', sm: 'row' }} gap={2}>
+              <FormControl fullWidth>
+                <InputLabel id="year-select-label">Năm</InputLabel>
+                <Select
+                  labelId="year-select-label"
+                  value={selectedYear}
+                  label="Năm"
+                  onChange={handleYearChange}
+                >
+                  {Array.from({ length: 26 }, (_, i) => 2025 + i).map((year) => (
+                    <MenuItem key={year} value={year}>
+                      {year}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+              <FormControl fullWidth>
+                <InputLabel id="month-select-label">Tháng</InputLabel>
+                <Select
+                  labelId="month-select-label"
+                  value={selectedMonth}
+                  label="Tháng"
+                  onChange={handleMonthChange}
+                >
+                  {Array.from({ length: 12 }, (_, i) => i + 1).map((month) => (
+                    <MenuItem key={month} value={month}>
+                      Tháng {month}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </Box>
           </Paper>
           {/* Water Meter Block */}
           <Paper elevation={2} sx={{ p: { xs: 1, sm: 2 }, mb: 3 }}>
             <Typography variant="h6" gutterBottom sx={{ color: 'primary.main' }}>
               Số Nước
             </Typography>
-            <Grid container spacing={2}>
-              <Grid item xs={12}>
-                <TextField
-                  fullWidth
-                  label="Số Nước Tổng"
-                  type="number"
-                  value={formData.water_total || ''}
-                  onChange={handleInputChange('water_total')}
-                  InputLabelProps={{ shrink: true }}
-                  sx={{ mb: 2 }}
-                />
-              </Grid>
-              <Grid item xs={6}>
+            <Box display="flex" flexDirection="column" gap={2}>
+              <TextField
+                fullWidth
+                label="Số Nước Tổng"
+                type="number"
+                value={formData.water_total || ''}
+                onChange={handleInputChange('water_total')}
+                InputLabelProps={{ shrink: true }}
+                sx={{ mb: 2 }}
+              />
+              <Box display="flex" gap={2}>
                 <TextField
                   fullWidth
                   label="Số Nước KD Trước"
@@ -345,8 +338,6 @@ export const MainPage = () => {
                   onChange={handleInputChange('water_business_before')}
                   InputLabelProps={{ shrink: true }}
                 />
-              </Grid>
-              <Grid item xs={6}>
                 <TextField
                   fullWidth
                   label="Số Nước KD Sau"
@@ -355,8 +346,8 @@ export const MainPage = () => {
                   onChange={handleInputChange('water_business_after')}
                   InputLabelProps={{ shrink: true }}
                 />
-              </Grid>
-            </Grid>
+              </Box>
+            </Box>
           </Paper>
 
           {/* Electricity Meter Block */}
@@ -370,18 +361,16 @@ export const MainPage = () => {
               <Typography variant="subtitle1" gutterBottom sx={{ color: 'primary.main', fontWeight: 'medium' }}>
                 Khu Trệt
               </Typography>
-              <Grid container spacing={2}>
-                <Grid item xs={12}>
-                  <TextField
-                    fullWidth
-                    label="Số Điện Tổng"
-                    type="number"
-                    value={formData.electricity_total || ''}
-                    onChange={handleInputChange('electricity_total')}
-                    InputLabelProps={{ shrink: true }}
-                  />
-                </Grid>
-                <Grid item xs={6}>
+              <Box display="flex" flexDirection="column" gap={2}>
+                <TextField
+                  fullWidth
+                  label="Số Điện Tổng"
+                  type="number"
+                  value={formData.electricity_total || ''}
+                  onChange={handleInputChange('electricity_total')}
+                  InputLabelProps={{ shrink: true }}
+                />
+                <Box display="flex" gap={2}>
                   <TextField
                     fullWidth
                     label="Số Điện KD Trước"
@@ -390,8 +379,6 @@ export const MainPage = () => {
                     onChange={handleInputChange('electricity_business_before')}
                     InputLabelProps={{ shrink: true }}
                   />
-                </Grid>
-                <Grid item xs={6}>
                   <TextField
                     fullWidth
                     label="Số Điện KD Sau"
@@ -400,8 +387,8 @@ export const MainPage = () => {
                     onChange={handleInputChange('electricity_business_after')}
                     InputLabelProps={{ shrink: true }}
                   />
-                </Grid>
-              </Grid>
+                </Box>
+              </Box>
             </Paper>
 
             {/* L1 Floor Block */}
@@ -409,18 +396,16 @@ export const MainPage = () => {
               <Typography variant="subtitle1" gutterBottom sx={{ color: 'primary.main', fontWeight: 'medium' }}>
                 Khu L1
               </Typography>
-              <Grid container spacing={2}>
-                <Grid item xs={12}>
-                  <TextField
-                    fullWidth
-                    label="L1 Lớn"
-                    type="number"
-                    value={formData.l1_large || ''}
-                    onChange={handleInputChange('l1_large')}
-                    InputLabelProps={{ shrink: true }}
-                  />
-                </Grid>
-                <Grid item xs={6}>
+              <Box display="flex" flexDirection="column" gap={2}>
+                <TextField
+                  fullWidth
+                  label="L1 Lớn"
+                  type="number"
+                  value={formData.l1_large || ''}
+                  onChange={handleInputChange('l1_large')}
+                  InputLabelProps={{ shrink: true }}
+                />
+                <Box display="flex" gap={2}>
                   <TextField
                     fullWidth
                     label="L1 Trái Bé"
@@ -429,8 +414,6 @@ export const MainPage = () => {
                     onChange={handleInputChange('l1_small_left')}
                     InputLabelProps={{ shrink: true }}
                   />
-                </Grid>
-                <Grid item xs={6}>
                   <TextField
                     fullWidth
                     label="L1 Phải Bé"
@@ -439,8 +422,8 @@ export const MainPage = () => {
                     onChange={handleInputChange('l1_small_right')}
                     InputLabelProps={{ shrink: true }}
                   />
-                </Grid>
-              </Grid>
+                </Box>
+              </Box>
             </Paper>
 
             {/* L2 Floor Block */}
@@ -448,18 +431,16 @@ export const MainPage = () => {
               <Typography variant="subtitle1" gutterBottom sx={{ color: 'primary.main', fontWeight: 'medium' }}>
                 Khu L2
               </Typography>
-              <Grid container spacing={2}>
-                <Grid item xs={12}>
-                  <TextField
-                    fullWidth
-                    label="L2 Lớn"
-                    type="number"
-                    value={formData.l2_large || ''}
-                    onChange={handleInputChange('l2_large')}
-                    InputLabelProps={{ shrink: true }}
-                  />
-                </Grid>
-                <Grid item xs={6}>
+              <Box display="flex" flexDirection="column" gap={2}>
+                <TextField
+                  fullWidth
+                  label="L2 Lớn"
+                  type="number"
+                  value={formData.l2_large || ''}
+                  onChange={handleInputChange('l2_large')}
+                  InputLabelProps={{ shrink: true }}
+                />
+                <Box display="flex" gap={2}>
                   <TextField
                     fullWidth
                     label="L2 Trái Bé"
@@ -468,8 +449,6 @@ export const MainPage = () => {
                     onChange={handleInputChange('l2_small_left')}
                     InputLabelProps={{ shrink: true }}
                   />
-                </Grid>
-                <Grid item xs={6}>
                   <TextField
                     fullWidth
                     label="L2 Phải Bé"
@@ -478,8 +457,8 @@ export const MainPage = () => {
                     onChange={handleInputChange('l2_small_right')}
                     InputLabelProps={{ shrink: true }}
                   />
-                </Grid>
-              </Grid>
+                </Box>
+              </Box>
             </Paper>
           </Paper>
 
