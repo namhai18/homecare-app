@@ -12,7 +12,7 @@ const theme = createTheme({
 
 function App() {
   const handleLogin = (email: string, password: string) => {
-    console.log('Login successful:', { email });
+    console.log('Login successful:', { email, password: '***' });
     // TODO: Add navigation or other post-login logic here
   };
 
