@@ -1,9 +1,8 @@
 -- Create meter readings table
 create table meter_readings (
-    id uuid default uuid_generate_v4() primary key,
     created_at timestamp with time zone default timezone('utc'::text, now()) not null,
     user_id uuid references auth.users(id),
-    reading_date date default current_date,
+    reading_date date default current_date not null,
     reading_year integer not null,
     reading_month integer not null,
     
@@ -21,7 +20,8 @@ create table meter_readings (
     l1_large decimal(10,2),
     l2_small_left decimal(10,2),
     l2_small_right decimal(10,2),
-    l2_large decimal(10,2)
+    l2_large decimal(10,2),
+    constraint meter_readings_pkey primary key (reading_date, reading_year, reading_month)
 );
 
 -- Create RLS (Row Level Security) policy

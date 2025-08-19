@@ -67,6 +67,8 @@ export const MainPage = () => {
     l2_large: null,
   });
   const [recordId, setRecordId] = useState<string | undefined>(undefined);
+  const [history, setHistory] = useState<any[]>([]);
+  const [historyLoading, setHistoryLoading] = useState(false);
   // const [loading, setLoading] = useState(false); // removed unused variable
 
   // Fetch data for selected month/year
@@ -225,8 +227,26 @@ export const MainPage = () => {
     }
   };
 
-  const handleChange = (_event: React.SyntheticEvent, newValue: number) => {
+  const handleChange = async (_event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
+    if (newValue === 1) {
+      // Fetch all records from meter_readings (ignore user)
+      setHistoryLoading(true);
+      try {
+        const { data, error } = await supabase
+          .from('meter_readings')
+          .select('*')
+          .order('reading_year', { ascending: false })
+          .order('reading_month', { ascending: false });
+        if (error) {
+          setHistory([]);
+        } else {
+          setHistory(data || []);
+        }
+      } finally {
+        setHistoryLoading(false);
+      }
+    }
   };
 
   const handleLogout = () => {
@@ -476,6 +496,58 @@ export const MainPage = () => {
         <Typography variant="h5" gutterBottom>
           Lịch Sử
         </Typography>
+        {historyLoading ? (
+          <Typography>Đang tải dữ liệu...</Typography>
+        ) : history.length === 0 ? (
+          <Typography>Không có dữ liệu lịch sử.</Typography>
+        ) : (
+          <Box sx={{ overflowX: 'auto' }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse', marginTop: 16 }}>
+              <thead>
+                <tr style={{ background: '#f0f0f0' }}>
+                  <th style={{ padding: 8, border: '1px solid #ddd' }}>Năm</th>
+                  <th style={{ padding: 8, border: '1px solid #ddd' }}>Tháng</th>
+                  <th style={{ padding: 8, border: '1px solid #ddd' }}>Ngày nhập</th>
+                  <th style={{ padding: 8, border: '1px solid #ddd' }}>Thời gian cập nhật</th>
+                  <th style={{ padding: 8, border: '1px solid #ddd' }}>Số Nước Tổng</th>
+                  <th style={{ padding: 8, border: '1px solid #ddd' }}>Số Nước KD Trước</th>
+                  <th style={{ padding: 8, border: '1px solid #ddd' }}>Số Nước KD Sau</th>
+                  <th style={{ padding: 8, border: '1px solid #ddd' }}>Số Điện Tổng</th>
+                  <th style={{ padding: 8, border: '1px solid #ddd' }}>Số Điện KD Trước</th>
+                  <th style={{ padding: 8, border: '1px solid #ddd' }}>Số Điện KD Sau</th>
+                  <th style={{ padding: 8, border: '1px solid #ddd' }}>L1 Trái Bé</th>
+                  <th style={{ padding: 8, border: '1px solid #ddd' }}>L1 Phải Bé</th>
+                  <th style={{ padding: 8, border: '1px solid #ddd' }}>L1 Lớn</th>
+                  <th style={{ padding: 8, border: '1px solid #ddd' }}>L2 Trái Bé</th>
+                  <th style={{ padding: 8, border: '1px solid #ddd' }}>L2 Phải Bé</th>
+                  <th style={{ padding: 8, border: '1px solid #ddd' }}>L2 Lớn</th>
+                </tr>
+              </thead>
+              <tbody>
+                {history.map((row) => (
+                  <tr key={row.id}>
+                    <td style={{ padding: 8, border: '1px solid #ddd', textAlign: 'center' }}>{row.reading_year}</td>
+                    <td style={{ padding: 8, border: '1px solid #ddd', textAlign: 'center' }}>{row.reading_month}</td>
+                    <td style={{ padding: 8, border: '1px solid #ddd' }}>{row.reading_date || ''}</td>
+                    <td style={{ padding: 8, border: '1px solid #ddd' }}>{row.updated_at ? new Date(row.updated_at).toLocaleString() : ''}</td>
+                    <td style={{ padding: 8, border: '1px solid #ddd', textAlign: 'right' }}>{row.water_total ?? ''}</td>
+                    <td style={{ padding: 8, border: '1px solid #ddd', textAlign: 'right' }}>{row.water_business_before ?? ''}</td>
+                    <td style={{ padding: 8, border: '1px solid #ddd', textAlign: 'right' }}>{row.water_business_after ?? ''}</td>
+                    <td style={{ padding: 8, border: '1px solid #ddd', textAlign: 'right' }}>{row.electricity_total ?? ''}</td>
+                    <td style={{ padding: 8, border: '1px solid #ddd', textAlign: 'right' }}>{row.electricity_business_before ?? ''}</td>
+                    <td style={{ padding: 8, border: '1px solid #ddd', textAlign: 'right' }}>{row.electricity_business_after ?? ''}</td>
+                    <td style={{ padding: 8, border: '1px solid #ddd', textAlign: 'right' }}>{row.l1_small_left ?? ''}</td>
+                    <td style={{ padding: 8, border: '1px solid #ddd', textAlign: 'right' }}>{row.l1_small_right ?? ''}</td>
+                    <td style={{ padding: 8, border: '1px solid #ddd', textAlign: 'right' }}>{row.l1_large ?? ''}</td>
+                    <td style={{ padding: 8, border: '1px solid #ddd', textAlign: 'right' }}>{row.l2_small_left ?? ''}</td>
+                    <td style={{ padding: 8, border: '1px solid #ddd', textAlign: 'right' }}>{row.l2_small_right ?? ''}</td>
+                    <td style={{ padding: 8, border: '1px solid #ddd', textAlign: 'right' }}>{row.l2_large ?? ''}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </Box>
+        )}
       </CustomTabPanel>
     </Box>
   );
