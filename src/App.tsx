@@ -1,25 +1,37 @@
+import { useState } from 'react';
 import { Login } from './components/Login'
+import { MainPage } from './components/MainPage'
 import { CssBaseline, ThemeProvider, createTheme } from '@mui/material'
 
 const theme = createTheme({
   palette: {
     mode: 'light',
     primary: {
-      main: '#1976d2',
+      main: '#667eea',
+    },
+    secondary: {
+      main: '#764ba2',
     },
   },
 });
 
 function App() {
-  const handleLogin = (email: string, password: string) => {
-    console.log('Login successful:', { email, password: '***' });
-    // TODO: Add navigation or other post-login logic here
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  const handleLogin = async (email: string, password: string) => {
+    try {
+      // TODO: Add actual authentication logic here
+      console.log('Login successful:', { email, password: '***' });
+      setIsLoggedIn(true);
+    } catch (error) {
+      console.error('Login failed:', error);
+    }
   };
 
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <Login onLogin={handleLogin} />
+      {isLoggedIn ? <MainPage /> : <Login onLogin={handleLogin} />}
     </ThemeProvider>
   )
 }
