@@ -65,12 +65,12 @@ export const MainPage = () => {
     l2_large: null,
   });
   const [recordId, setRecordId] = useState<string | undefined>(undefined);
-  const [loading, setLoading] = useState(false);
+  // const [loading, setLoading] = useState(false); // removed unused variable
 
   // Fetch data for selected month/year
   useEffect(() => {
     const fetchData = async () => {
-      setLoading(true);
+  // setLoading(true); // removed unused loading state
       try {
         const { data: { user } } = await supabase.auth.getUser();
         if (!user) {
@@ -89,7 +89,7 @@ export const MainPage = () => {
             l2_large: null,
           });
           setRecordId(undefined);
-          setLoading(false);
+          // setLoading(false); // removed unused loading state
           return;
         }
         const { data, error } = await supabase
@@ -149,7 +149,7 @@ export const MainPage = () => {
           setRecordId(undefined);
         }
       } finally {
-        setLoading(false);
+        // setLoading(false); // removed unused loading state
       }
     };
     fetchData();

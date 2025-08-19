@@ -19,10 +19,10 @@ const theme = createTheme({
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-  const handleLogin = async (email: string, password: string) => {
+  const handleLogin = async (email: string, _password: string) => {
     try {
       // TODO: Add actual authentication logic here
-      console.log('Login successful:', { email, password: '***' });
+      console.log('Login successful:', { email });
       setIsLoggedIn(true);
     } catch (error) {
       console.error('Login failed:', error);
