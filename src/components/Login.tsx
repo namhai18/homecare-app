@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import {
   Box,
@@ -9,6 +10,10 @@ import {
   Alert,
   InputAdornment,
   IconButton,
+  Checkbox,
+  FormControlLabel,
+  Link,
+  Divider
 } from '@mui/material';
 import { Person, Lock, Visibility, VisibilityOff } from '@mui/icons-material';
 import { supabase } from '../lib/supabase';
@@ -23,6 +28,7 @@ export const Login = ({ onLogin }: LoginProps) => {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [remember, setRemember] = useState(false);
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -48,44 +54,24 @@ export const Login = ({ onLogin }: LoginProps) => {
   };
 
   return (
-    <Container component="main" maxWidth="xs" sx={{
-      height: '100vh',
+    <Box sx={{
+      minHeight: '100vh',
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
-      background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+      // Remove background color here for a plain look
     }}>
-      <Box
-        sx={{
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          width: '100%',
-        }}
-      >
-        <Paper
-          elevation={12}
-          sx={{
-            padding: 4,
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            width: '100%',
-            borderRadius: 3,
-            background: 'rgba(255, 255, 255, 0.95)',
-            backdropFilter: 'blur(10px)',
-          }}
-        >
-          <Typography
-            component="h1"
-            variant="h4"
-            sx={{
-              mb: 4,
-              fontWeight: 600,
-              color: '#333',
-            }}
-          >
-            Welcome Back
+      <Container maxWidth="sm" sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+        {/* Logo and title */}
+        <Box sx={{ mb: 3, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+          <Box sx={{ mb: 1 }}>
+            <img src="/vite.svg" alt="Logo" style={{ width: 56, height: 56 }} />
+          </Box>
+          <Typography variant="h5" sx={{ fontWeight: 700, color: '#3c3c3c' }}>Your Social Campaigns</Typography>
+        </Box>
+  <Paper elevation={8} sx={{ p: 4, borderRadius: 4, width: '100%', maxWidth: 400, background: 'none', boxShadow: 3 }}>
+          <Typography component="h1" variant="h4" sx={{ mb: 2, fontWeight: 600, color: '#333', textAlign: 'center' }}>
+            Sign In
           </Typography>
           <Box component="form" onSubmit={handleSubmit} sx={{ mt: 1, width: '100%' }}>
             {error && (
@@ -93,12 +79,21 @@ export const Login = ({ onLogin }: LoginProps) => {
                 {error}
               </Alert>
             )}
-            <TextField
+            <Box sx={{ mb: 2 }}>
+              <Typography component="label" htmlFor="email" sx={{ fontWeight: 500, fontSize: '1rem', color: '#222', mb: 0.5, display: 'block' }}>
+                Username
+              </Typography>
+              <TextField
               margin="normal"
               required
               fullWidth
-              id="email"
-              label="Email Address"
+                id="email"
+                label=""
+                sx={{
+                  '& .MuiInputBase-root': {
+                    backgroundColor: '#fff',
+                  },
+                }}
               name="email"
               autoComplete="email"
               autoFocus
@@ -111,14 +106,23 @@ export const Login = ({ onLogin }: LoginProps) => {
                   </InputAdornment>
                 ),
               }}
-              sx={{ mb: 2 }}
-            />
-            <TextField
+              />
+            </Box>
+            <Box sx={{ mb: 2 }}>
+              <Typography component="label" htmlFor="password" sx={{ fontWeight: 500, fontSize: '1rem', color: '#222', mb: 0.5, display: 'block' }}>
+                Password
+              </Typography>
+              <TextField
               margin="normal"
               required
               fullWidth
               name="password"
-              label="Password"
+                label=""
+                sx={{
+                  '& .MuiInputBase-root': {
+                    backgroundColor: '#fff',
+                  },
+                }}
               type={showPassword ? 'text' : 'password'}
               id="password"
               autoComplete="current-password"
@@ -142,13 +146,23 @@ export const Login = ({ onLogin }: LoginProps) => {
                   </InputAdornment>
                 ),
               }}
-            />
+              />
+            </Box>
+            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mt: 1, mb: 2 }}>
+              <FormControlLabel
+                control={<Checkbox checked={remember} onChange={e => setRemember(e.target.checked)} color="primary" />}
+                label={<Typography variant="body2">Remember this Device</Typography>}
+              />
+              <Link href="#" variant="body2" underline="hover" sx={{ color: 'primary.main', fontWeight: 500 }}>
+                Forgot Password ?
+              </Link>
+            </Box>
             <Button
               type="submit"
               fullWidth
               variant="contained"
               sx={{
-                mt: 4,
+                mt: 2,
                 mb: 2,
                 py: 1.5,
                 fontSize: '1.1rem',
@@ -163,9 +177,18 @@ export const Login = ({ onLogin }: LoginProps) => {
             >
               {loading ? 'Signing in...' : 'Sign In'}
             </Button>
+            <Divider sx={{ my: 2 }} />
+            <Box sx={{ textAlign: 'center' }}>
+              <Typography variant="body2" sx={{ color: '#888' }}>
+                New to Modernize?
+                <Link href="#" underline="hover" sx={{ ml: 1, color: 'primary.main', fontWeight: 500 }}>
+                  Create an account
+                </Link>
+              </Typography>
+            </Box>
           </Box>
         </Paper>
-      </Box>
-    </Container>
+      </Container>
+    </Box>
   );
 };
